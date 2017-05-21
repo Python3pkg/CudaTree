@@ -3,15 +3,15 @@ import pycuda.driver as cuda
 from pycuda import gpuarray
 import numpy as np
 import math
-from util import total_times, compile_module, mk_kernel, mk_tex_kernel, timer
-from util import  dtype_to_ctype, get_best_dtype, start_timer, end_timer
-from base_tree import BaseTree
+from .util import total_times, compile_module, mk_kernel, mk_tex_kernel, timer
+from .util import  dtype_to_ctype, get_best_dtype, start_timer, end_timer
+from .base_tree import BaseTree
 from pycuda import driver
 import random
 from parakeet import jit
-from util import start_timer, end_timer, show_timings
+from .util import start_timer, end_timer, show_timings
 import sys
-import util
+from . import util
 
 def sync():
   if False:
@@ -37,7 +37,7 @@ def restore_tree(left_children,
 
 @jit
 def  _shuffle(x, r):
-  for i in xrange(1, len(x)):
+  for i in range(1, len(x)):
     j = np.fmod(r[i], i)
     old_xj = x[j]
     x[j] = x[i]

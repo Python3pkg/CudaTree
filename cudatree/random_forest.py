@@ -1,9 +1,9 @@
 import numpy as np
-from random_tree import RandomClassifierTree
-from util import timer, get_best_dtype, dtype_to_ctype, mk_kernel, mk_tex_kernel, compile_module
+from .random_tree import RandomClassifierTree
+from .util import timer, get_best_dtype, dtype_to_ctype, mk_kernel, mk_tex_kernel, compile_module
 from pycuda import gpuarray
 from pycuda import driver
-from util import start_timer, end_timer, show_timings
+from .util import start_timer, end_timer, show_timings
 from parakeet import jit
 import math
 
@@ -314,13 +314,13 @@ class RandomForestClassifier(object):
       self.bfs_threshold = bfs_threshold
     
     if self.verbose: 
-      print "bsf_threadshold : %d; bootstrap : %r; min_samples_split : %d" % (self.bfs_threshold, 
-          self.bootstrap,  self.min_samples_split)
-      print "n_samples : %d; n_features : %d; n_labels : %d; max_features : %d" % (self.stride, 
-          self.n_features, self.n_labels, self.max_features)
+      print("bsf_threadshold : %d; bootstrap : %r; min_samples_split : %d" % (self.bfs_threshold, 
+          self.bootstrap,  self.min_samples_split))
+      print("n_samples : %d; n_features : %d; n_labels : %d; max_features : %d" % (self.stride, 
+          self.n_features, self.n_labels, self.max_features))
 
   
-    self._trees = [RandomClassifierTree(self) for i in xrange(self.n_estimators)] 
+    self._trees = [RandomClassifierTree(self) for i in range(self.n_estimators)] 
 
     for i, tree in enumerate(self._trees):
       si, n_samples = self._get_sorted_indices(self.sorted_indices)
@@ -328,7 +328,7 @@ class RandomForestClassifier(object):
       if self.verbose: 
         with timer("Tree %s" % (i,)):
           tree.fit(self.samples, self.target, si, n_samples)   
-        print ""
+        print("")
       else:
         tree.fit(self.samples, self.target, si, n_samples)   
     
@@ -355,7 +355,7 @@ class RandomForestClassifier(object):
     for i, tree in enumerate(self._trees):
       res[i] =  tree.gpu_predict(x, self.predict_kernel)
 
-    res =  np.array([np.argmax(np.bincount(res[:,i])) for i in xrange(res.shape[1])]) 
+    res =  np.array([np.argmax(np.bincount(res[:,i])) for i in range(res.shape[1])]) 
     if hasattr(self, "compt_table"):
       res = convert_result(self.compt_table, res) 
 
@@ -369,7 +369,7 @@ class RandomForestClassifier(object):
     for i, tree in enumerate(self._trees):
       res[i] =  tree.gpu_predict(x, self.predict_kernel)
     
-    for i in xrange(x.shape[0]):
+    for i in range(x.shape[0]):
       tmp_res = np.bincount(res[:, i])
       tmp_res.resize(self.n_labels)
       res_proba[i] = tmp_res.astype(np.float64) / len(self._trees)

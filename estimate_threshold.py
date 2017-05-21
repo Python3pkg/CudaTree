@@ -27,20 +27,20 @@ for f in all_features:
   rfs[f] = cudatree.RandomForestClassifier(n_estimators = 3, bootstrap = False, max_features = max_features)
 
 for n_classes in reversed(all_classes):
-  print "n_classes", n_classes
+  print("n_classes", n_classes)
   for n_examples in reversed(all_examples):
-    print "n_examples", n_examples
+    print("n_examples", n_examples)
     y = np.random.randint(low = 0, high = n_classes, size = n_examples)
     for n_features in reversed(all_features):
-      print "n_features", n_features
+      print("n_features", n_features)
       max_features = int(np.sqrt(n_features))
-      print "sqrt(n_features) =", max_features 
+      print("sqrt(n_features) =", max_features) 
       if n_features * n_examples > 10**7:
-        print "Skipping due excessive n_features * n_examples..."
+        print("Skipping due excessive n_features * n_examples...")
 	i += len(thresholds)
         continue
       if n_examples * n_classes > 10 ** 7:
-        print "Skipping due to excessive n_examples * n_classes"
+        print("Skipping due to excessive n_examples * n_classes")
 	i += len(thresholds)
         continue
 	 
@@ -51,18 +51,18 @@ for n_classes in reversed(all_classes):
       best_time = np.inf
       best_threshold = None
       best_threshold_prct = None 
-      print "(n_classes = %d, n_examples = %d, max_features = %d)" % (n_classes, n_examples, max_features)
+      print("(n_classes = %d, n_examples = %d, max_features = %d)" % (n_classes, n_examples, max_features))
       tested_thresholds = []
       times = []
       for bfs_threshold in thresholds:
         bfs_threshold_prct = float(bfs_threshold) / n_examples
-        print "  -- (%d / %d) threshold %d (%0.2f%%)" % (i, total_iters,  bfs_threshold, bfs_threshold_prct * 100)
+        print("  -- (%d / %d) threshold %d (%0.2f%%)" % (i, total_iters,  bfs_threshold, bfs_threshold_prct * 100))
         i += 1 
         if bfs_threshold > n_examples:
-          print "Skipping threshold > n_examples" 
+          print("Skipping threshold > n_examples") 
 	  continue 
         if bfs_threshold / float(n_examples) < 0.001:
-	  print "SKipping, BFS threshold too small relative to n_examples"
+	  print("SKipping, BFS threshold too small relative to n_examples")
         
        
         start_t = time.time()
@@ -70,19 +70,19 @@ for n_classes in reversed(all_classes):
         t = time.time() - start_t
         tested_thresholds.append(bfs_threshold)
         times.append(t)
-        print "  ---> total time", t 
+        print("  ---> total time", t) 
         if t < best_time:
           best_time = t
           best_threshold = bfs_threshold
           best_theshold_prct = bfs_threshold_prct
-      print "thresholds", tested_thresholds
-      print "times", times 
+      print("thresholds", tested_thresholds)
+      print("times", times) 
       inputs.append([1.0, n_classes, n_examples, max_features])
       best_threshold_values.append(best_threshold)
       best_threshold_prcts.append(best_threshold_prct)
 
 X = np.array(inputs)
-print "input shape", X.shape
+print("input shape", X.shape)
 
 
 
@@ -91,9 +91,9 @@ best_threshold_values = np.array(best_threshold_values)
 Y = best_threshold_values
 
 lstsq_result = np.linalg.lstsq(X, Y)
-print "Regression coefficients:", lstsq_result[0]
+print("Regression coefficients:", lstsq_result[0])
 n = len(best_threshold_values)
-print "Regression residual:", lstsq_result[1], "RMSE:", np.sqrt(lstsq_result[1] / n)
+print("Regression residual:", lstsq_result[1], "RMSE:", np.sqrt(lstsq_result[1] / n))
 
 import socket 
 csv_filename = "threshold_results_" + socket.gethostname()
@@ -110,14 +110,14 @@ LogY = np.log(Y)
 
 log_lstsq_result = np.linalg.lstsq(LogX, LogY)
 
-print "Log regression coefficients:", log_lstsq_result[0]
+print("Log regression coefficients:", log_lstsq_result[0])
 n = len(best_threshold_values)
-print "Log regression residual:", log_lstsq_result[1], "RMSE:", np.sqrt(log_lstsq_result[1] / n)
+print("Log regression residual:", log_lstsq_result[1], "RMSE:", np.sqrt(log_lstsq_result[1] / n))
 log_pred = np.dot(LogX, log_lstsq_result[0])
 pred = np.exp(log_pred)
 residual = np.sum((Y - pred)**2)
-print "Actual residual", residual 
-print "Actual RMSE:", np.sqrt(residual / n)
+print("Actual residual", residual) 
+print("Actual RMSE:", np.sqrt(residual / n))
 
 
 """

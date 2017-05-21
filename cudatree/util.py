@@ -53,11 +53,11 @@ class timer(object):
     self.name = name
 
   def __enter__(self, *args):
-    print "Running %s" % self.name 
+    print("Running %s" % self.name) 
     self.start_t = time.time()
 
   def __exit__(self, *args):
-    print "Time for %s: %s" % (self.name, time.time() - self.start_t)
+    print("Time for %s: %s" % (self.name, time.time() - self.start_t))
 
 def dtype_to_ctype(dtype):
   if dtype.kind == 'f':
@@ -126,15 +126,15 @@ def end_timer(name):
   total_times[name] = total
 
 def show_timings(limit = 100):
-  tables = sorted(total_times.iteritems(), 
+  tables = sorted(iter(total_times.items()), 
                   key = operator.itemgetter(1), 
                   reverse = True) 
   idx = 0
-  print "---------Timings---------"
+  print("---------Timings---------")
   for key, value in tables:
-    print key.ljust(15), ":", value
+    print(key.ljust(15), ":", value)
     idx += 1
     if idx == limit:
       break
 
-  print "-------------------------"
+  print("-------------------------")

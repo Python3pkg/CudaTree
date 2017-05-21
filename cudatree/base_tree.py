@@ -1,8 +1,8 @@
 import numpy as np
-from util import get_best_dtype
+from .util import get_best_dtype
 from pycuda import gpuarray
 import math
-from util import start_timer, end_timer
+from .util import start_timer, end_timer
 from pycuda import driver
 
 class BaseTree(object):
@@ -14,12 +14,12 @@ class BaseTree(object):
     def recursive_print(idx, depth):
       if self.left_children[idx] == 0 and \
           self.right_children[idx] == 0:
-        print "[LEAF] Depth: %s, Value: %s" % \
-            (depth, self.values_array[idx])
+        print("[LEAF] Depth: %s, Value: %s" % \
+            (depth, self.values_array[idx]))
       else:
-        print "[NODE] Depth: %s, Feature: %s, Threshold: %f" %\
+        print("[NODE] Depth: %s, Feature: %s, Threshold: %f" %\
             (depth, self.feature_idx_array[idx], 
-            self.feature_threshold_array[idx])
+            self.feature_threshold_array[idx]))
         recursive_print(self.left_children[idx], depth + 1)
         recursive_print(self.right_children[idx], depth + 1) 
     recursive_print(0, 0)

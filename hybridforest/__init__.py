@@ -1,1 +1,1 @@
-from hybridforest import RandomForestClassifier
+from .hybridforest import RandomForestClassifier

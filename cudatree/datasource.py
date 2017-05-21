@@ -1,4 +1,4 @@
-import cPickle
+import pickle
 import numpy as np
 from os import path
 from sklearn.datasets import load_digits,load_iris,load_diabetes,fetch_covtype 
@@ -27,33 +27,33 @@ def load_data(ds_name):
     y_train = ds.target 
   elif ds_name == "cf10":
     with open(data_dir + "data_batch_1", "r") as f:
-      ds = cPickle.load(f)
+      ds = pickle.load(f)
       x_train = ds['data']
       y_train = np.array(ds['labels'])
   elif ds_name == "cf100":
     with open(data_dir + "train", "r") as f:
-      ds = cPickle.load(f)
+      ds = pickle.load(f)
       x_train = ds['data']
       y_train = np.array(ds['fine_labels'])
   elif ds_name == "cd10_test":
     with open(data_dir + "test_batch", "r") as f:
-      ds = cPickle.load(f)
+      ds = pickle.load(f)
       x_train = ds['data']
       y_train = np.array(ds['labels'])
   elif ds_name == "cf100_test":
     with open(data_dir + "test", "r") as f:
-      ds = cPickle.load(f)
+      ds = pickle.load(f)
       x_train = ds['data']
       y_train = np.array(ds['fine_labels'])
   elif ds_name == "inet":
     if _img_data is None:
       with open("/ssd/imagenet-subset.pickle", "r") as f:
-        _img_data = cPickle.load(f)
+        _img_data = pickle.load(f)
     return _img_data['x'][0:10000],  _img_data['Y'][0:10000] 
   elif ds_name == "inet_test":
     if _img_data is None:
       with open("/ssd/imagenet-subset.pickle", "r") as f:
-        _img_data = cPickle.load(f)
+        _img_data = pickle.load(f)
     return _img_data['x'][10000:],  _img_data['Y'][10000:] 
   elif ds_name == "kdd":
     data = np.load(data_dir + "data.npy")

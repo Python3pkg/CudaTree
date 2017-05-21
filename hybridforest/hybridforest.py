@@ -7,7 +7,7 @@ import multiprocessing
 from multiprocessing import Value, Lock, cpu_count
 import atexit
 import pycuda
-from builder import CPUBuilder, GPUBuilder
+from .builder import CPUBuilder, GPUBuilder
 
 #kill the child process if any
 def cleanup(proc):
@@ -149,7 +149,7 @@ class RandomForestClassifier(object):
                               self.max_features,
                               bfs_threshold,
                               remain_trees,
-                              lock) for i in xrange(self.n_gpus - 1)]
+                              lock) for i in range(self.n_gpus - 1)]
  
     pycuda.autoinit.context.pop()  
     for b in gpu_builders:
@@ -181,7 +181,7 @@ class RandomForestClassifier(object):
     n_cd_trees = self.n_estimators - n_sk_trees
     cuda_proba = self._cuda_forest.predict_proba(X) * n_cd_trees
     final_proba = (sk_proba  + cuda_proba ) / self.n_estimators
-    res = np.array([np.argmax(final_proba[i]) for i in xrange(final_proba.shape[0])])
+    res = np.array([np.argmax(final_proba[i]) for i in range(final_proba.shape[0])])
     
     if hasattr(self._cuda_forest, "compt_table"):
       res = convert_result(self._cuda_forest.compt_table, res)

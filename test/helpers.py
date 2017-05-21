@@ -12,14 +12,14 @@ def compare_accuracy(x,y, n_estimators = 11, bootstrap = True, slop = 0.98, n_re
   skrf = sklearn.ensemble.RandomForestClassifier(n_estimators = n_estimators, bootstrap = bootstrap)
   cuda_score_total = 0 
   sk_score_total = 0
-  for i in xrange(n_repeat):
+  for i in range(n_repeat):
     cudarf.fit(xtrain, ytrain)
     skrf.fit(xtrain, ytrain)
     sk_score = skrf.score(xtest, ytest)
     cuda_score = cudarf.score(xtest, ytest)
-    print "Iteration", i 
-    print "Sklearn score", sk_score 
-    print "CudaTree score", cuda_score 
+    print("Iteration", i) 
+    print("Sklearn score", sk_score) 
+    print("CudaTree score", cuda_score) 
     sk_score_total += sk_score 
     cuda_score_total += cuda_score 
 
@@ -39,14 +39,14 @@ def compare_hybrid_accuracy(x,y, n_estimators = 20, bootstrap = True, slop = 0.9
   skrf = sklearn.ensemble.RandomForestClassifier(n_estimators = n_estimators, bootstrap = bootstrap)
   cuda_score_total = 0 
   sk_score_total = 0
-  for i in xrange(n_repeat):
+  for i in range(n_repeat):
     hybridrf.fit(xtrain, ytrain)
     skrf.fit(xtrain, ytrain)
     sk_score = skrf.score(xtest, ytest)
     cuda_score = hybridrf.score(xtest, ytest)
-    print "Iteration", i 
-    print "Sklearn score", sk_score 
-    print "Hybrid score", cuda_score 
+    print("Iteration", i) 
+    print("Sklearn score", sk_score) 
+    print("Hybrid score", cuda_score) 
     sk_score_total += sk_score 
     cuda_score_total += cuda_score 
 
